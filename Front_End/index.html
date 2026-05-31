@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پروژه شبیه‌ساز و مبدل NFA-λ</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>شبیه‌ساز NFA-λ و تبدیل به NFA</h1>
+        <p class="subtitle">پروژه درس نظریه زبان‌ها و ماشین‌ها</p>
+      </header>
+
+      <!-- تب‌های اصلی -->
+      <div class="tabs-header">
+        <button class="tab-btn active" data-tab="input-tab">
+          ✏️ ورودی دستی
+        </button>
+        <button class="tab-btn" data-tab="text-input-tab">📄 ورودی متنی</button>
+        <button class="tab-btn" data-tab="help-tab">❓ راهنما</button>
+      </div>
+
+      <main>
+        <!-- تب ورودی دستی -->
+        <section id="input-tab" class="tab-content active">
+          <!-- بخش دریافت اطلاعات پایه ماشین -->
+          <section class="card">
+            <h2>تعریف ماشین</h2>
+
+            <div class="field">
+              <label for="statesInput">Q (مجموعه حالات)</label>
+              <div class="input-with-btn">
+                <input
+                  id="statesInput"
+                  type="text"
+                  placeholder="مثال: q0, q1, q2"
+                />
+                <button
+                  type="button"
+                  class="btn btn-op-blue"
+                  id="btnConfirmStates"
+                >
+                  ✔ تایید
+                </button>
+              </div>
+              <small>اسامی حالات را با فاصله یا ویرگول جدا کنید</small>
+            </div>
+
+            <div class="field">
+              <label for="alphabetInput">Σ (الفبا)</label>
+              <div class="input-with-btn">
+                <input
+                  id="alphabetInput"
+                  type="text"
+                  placeholder="مثال: a, b, c"
+                />
+                <button
+                  type="button"
+                  class="btn btn-op-blue"
+                  id="btnConfirmAlphabet"
+                >
+                  ✔ تایید
+                </button>
+              </div>
+              <small
+                >حروف الفبا را وارد کنید (λ به صورت خودکار اضافه می‌شود)</small
+              >
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="startStateSelect">q₀ (حالت شروع)</label>
+                <select id="startStateSelect" class="custom-select">
+                  <option value="">-- انتخاب کنید --</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="finalStatesSelect">F (حالات نهایی)</label>
+                <div class="final-states-container">
+                  <div class="final-states-buttons" id="finalStatesButtons">
+                    <!-- دکمه‌های وضعیت‌ها به صورت پویا اضافه می‌شوند -->
+                  </div>
+                  <small
+                    >برای انتخاب چندگانه کلیک کنید (تغییر رنگ نشان‌دهنده انتخاب
+                    است)</small
+                  >
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- بخش دریافت تابع گذار -->
+          <section class="card">
+            <h2>δ (تابع گذار)</h2>
+            <div class="transitions-header">
+              <span>از وضعیت</span>
+              <span>نماد</span>
+              <span>به وضعیت</span>
+              <span>عملیات</span>
+            </div>
+            <div id="transitionsContainer">
+              <!-- ردیف‌های گذار -->
+            </div>
+            <div class="transitions-actions">
+              <button
+                type="button"
+                id="btnAddTransition"
+                class="btn btn-secondary"
+              >
+                ➕ افزودن گذار جدید
+              </button>
+              <button
+                type="button"
+                id="btnClearTransitions"
+                class="btn btn-danger"
+              >
+                🗑️ پاک کردن همه
+              </button>
+            </div>
+          </section>
+        </section>
+
+        <!-- تب ورودی متنی -->
+        <section id="text-input-tab" class="tab-content">
+          <section class="card">
+            <h2>📄 ورودی متنی</h2>
+            <div class="field">
+              <label for="textInputArea">ورودی را با فرمت زیر وارد کنید:</label>
+              <textarea
+                id="textInputArea"
+                rows="12"
+                placeholder="Q = q0, q1, q2, q3
+Σ = a, b
+q0 = q0
+F = q3
+δ(q0, a) = q1
+δ(q0, λ) = q2
+δ(q1, b) = q3
+δ(q2, a) = q3"
+              ></textarea>
+              <small
+                >فرمت: Q = ... | Σ = ... | q0 = ... | F = ... | δ(...) =
+                ...</small
+              >
+            </div>
+            <button
+              type="button"
+              id="btnParseTextInput"
+              class="btn btn-primary"
+            >
+              🔄 تحلیل ورودی متنی
+            </button>
+          </section>
+        </section>
+
+        <!-- تب راهنما -->
+        <section id="help-tab" class="tab-content">
+          <section class="card">
+            <h2>❓ راهنمای فرمت ورودی</h2>
+            <div class="help-content">
+              <h3>فرمت پیشنهادی:</h3>
+              <pre>
+Q = q0, q1, q2, q3
+Σ = a, b
+q0 = q0
+F = q3
+δ(q0, a) = q1
+δ(q0, λ) = q2
+δ(q1, b) = q3
+δ(q2, a) = q3</pre
+              >
+
+              <h3>نمادهای مجاز:</h3>
+              <ul>
+                <li>λ یا lambda برای انتقال پوچ</li>
+                <li>حروف انگلیسی و اعداد برای نام حالت‌ها</li>
+                <li>هر کاراکتر برای نمادهای الفبا (به جز λ)</li>
+              </ul>
+
+              <h3>نکات:</h3>
+              <ul>
+                <li>فقط یک حالت شروع مجاز است</li>
+                <li>چند حالت نهایی مجاز است</li>
+                <li>انتقال‌ها می‌توانند چندتایی باشند</li>
+              </ul>
+            </div>
+          </section>
+        </section>
+
+        <!-- بخش شبیه‌سازی رشته -->
+        <section class="card">
+          <h2>🎯 شبیه‌سازی رشته</h2>
+          <div class="field-row">
+            <div class="field">
+              <label for="stringInput">رشته ورودی:</label>
+              <input id="stringInput" type="text" placeholder="مثال: aab" />
+            </div>
+            <div class="field">
+              <label>نتیجه:</label>
+              <div id="simulationResult" class="result-box">
+                نتیجه شبیه‌سازی اینجا نمایش داده می‌شود
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- دکمه‌های عملیاتی -->
+        <section class="actions">
+          <button type="button" id="btnLambdaClosure" class="btn btn-operation">
+            🔍 محاسبه λ-Closure
+          </button>
+          <button type="button" id="btnSimulate" class="btn btn-operation">
+            ⚡ شبیه‌سازی رشته
+          </button>
+          <button type="button" id="btnRemoveLambda" class="btn btn-operation">
+            🔄 حذف λ و تبدیل به NFA
+          </button>
+          <button type="button" id="btnExportText" class="btn btn-operation">
+            💾 خروجی متنی
+          </button>
+        </section>
+
+        <!-- دکمه‌های گراف -->
+        <section class="graph-actions">
+          <button type="button" id="btnDrawNFALambda" class="btn btn-graph">
+            📊 رسم NFA-λ
+          </button>
+          <button type="button" id="btnDrawNFA" class="btn btn-graph">
+            📈 رسم NFA بدون λ
+          </button>
+          <button type="button" id="btnClearGraph" class="btn btn-danger">
+            🗑️ پاک کردن گراف
+          </button>
+        </section>
+
+        <!-- بخش خروجی‌ها -->
+        <section class="output-section card">
+          <h2>📋 خروجی‌ها</h2>
+          <div class="output-tabs">
+            <button class="output-tab active" data-output="lambda-closure">
+              λ-Closure
+            </button>
+            <button class="output-tab" data-output="simulation">
+              شبیه‌سازی
+            </button>
+            <button class="output-tab" data-output="nfa-conversion">
+              تبدیل NFA
+            </button>
+            <button class="output-tab" data-output="machine-info">
+              اطلاعات ماشین
+            </button>
+          </div>
+          <pre id="textOutput" class="output-box"></pre>
+        </section>
+
+        <!-- بخش نمایش گراف -->
+        <section class="graph-section card">
+          <h2>📊 نمای گرافیکی</h2>
+          <div id="graphContainer" class="graph-container">
+            <div class="graph-placeholder">
+              <p>گراف در اینجا رسم خواهد شد</p>
+              <small>برای رسم گراف یکی از دکمه‌های بالا را کلیک کنید</small>
+            </div>
+          </div>
+          <div class="graph-legend">
+            <div class="legend-item">
+              <span class="legend-color start-color"></span>
+              <span>حالت شروع</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color final-color"></span>
+              <span>حالت نهایی</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color start-final-color"></span>
+              <span>شروع و نهایی</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-edge">→</span>
+              <span>انتقال λ</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="assets/js/script.js"></script>
+  </body>
+</html>

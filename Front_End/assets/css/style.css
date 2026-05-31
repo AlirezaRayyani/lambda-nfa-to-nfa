@@ -1,0 +1,578 @@
+/* فونت وزیرمتن برای نمایش بهتر متون فارسی */
+@import url("https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap");
+
+:root {
+  --primary-color: #2563eb;
+  --secondary-color: #7c3aed;
+  --success-color: #10b981;
+  --danger-color: #ef4444;
+  --warning-color: #f59e0b;
+  --info-color: #3b82f6;
+  --light-bg: #f8fafc;
+  --dark-text: #1e293b;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Vazirmatn", Tahoma, sans-serif;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: var(--dark-text);
+  line-height: 1.6;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+/* هدر */
+header {
+  text-align: center;
+  padding: 30px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  color: white;
+}
+
+header h1 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.subtitle {
+  opacity: 0.9;
+  font-size: 1.1rem;
+}
+
+/* تب‌های اصلی */
+.tabs-header {
+  display: flex;
+  background: var(--light-bg);
+  border-bottom: 2px solid var(--border-color);
+  padding: 0 30px;
+}
+
+.tab-btn {
+  padding: 16px 24px;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.tab-btn:hover {
+  color: var(--primary-color);
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.tab-btn.active {
+  color: var(--primary-color);
+  background: white;
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 3px 3px 0 0;
+}
+
+.tab-content {
+  display: none;
+  padding: 30px;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* کارت‌ها */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color);
+}
+
+.card h2 {
+  font-size: 1.4rem;
+  color: var(--dark-text);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* فیلدها */
+.field {
+  margin-bottom: 24px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.field small {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.input-with-btn {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.input-with-btn input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.input-with-btn input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* ---------- استایل جدید ورودی شبیه‌سازی ---------- */
+#stringInput {
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 1.1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 30px;
+  background: #f8fafc;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  outline: none;
+  direction: ltr; /* ورودی انگلیسی */
+  text-align: left;
+}
+
+#stringInput:focus {
+  border-color: var(--primary-color);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+#stringInput::placeholder {
+  color: #94a3b8;
+  font-style: italic;
+  direction: rtl; /* placeholder فارسی */
+}
+/* ------------------------------------------------- */
+
+.custom-select {
+  padding: 12px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  width: 100%;
+  background: white;
+  cursor: pointer;
+}
+
+.custom-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* حالت‌های نهایی */
+.final-states-container {
+  background: var(--light-bg);
+  padding: 16px;
+  border-radius: 8px;
+  border: 2px dashed var(--border-color);
+}
+
+.final-states-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.final-state-btn {
+  padding: 10px 20px;
+  border: 2px solid #cbd5e1;
+  background: white;
+  border-radius: 6px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.final-state-btn:hover {
+  border-color: var(--info-color);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.final-state-btn.selected {
+  background: var(--info-color);
+  color: white;
+  border-color: var(--info-color);
+}
+
+/* بخش تابع گذار */
+.transitions-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 1fr;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--light-bg);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.transition-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 1fr;
+  gap: 12px;
+  padding: 12px 16px;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  transition: background 0.2s;
+}
+
+.transition-row:hover {
+  background: #f8fafc;
+}
+
+.transition-row input {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.transition-row input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.btn-remove-transition {
+  padding: 8px 16px;
+  background: var(--danger-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-remove-transition:hover {
+  background: #dc2626;
+}
+
+.transitions-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* دکمه‌ها */
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-op-blue {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-primary {
+  background: var(--success-color);
+  color: white;
+}
+
+.btn-secondary {
+  background: #64748b;
+  color: white;
+}
+
+.btn-danger {
+  background: var(--danger-color);
+  color: white;
+}
+
+.btn-operation {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  min-width: 180px;
+}
+
+.btn-graph {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  min-width: 180px;
+}
+
+.actions,
+.graph-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+/* نتیجه شبیه‌سازی */
+.result-box {
+  padding: 16px;
+  background: var(--light-bg);
+  border-radius: 8px;
+  border: 2px solid var(--border-color);
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.result-box.accepted {
+  background: #d1fae5;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.result-box.rejected {
+  background: #fee2e2;
+  border-color: #ef4444;
+  color: #991b1b;
+}
+
+/* خروجی‌ها */
+.output-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.output-tab {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.output-tab:hover {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--primary-color);
+}
+
+.output-tab.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.output-box {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: "Courier New", monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  min-height: 150px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* گراف */
+.graph-container {
+  width: 100%;
+  height: 500px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  background: white;
+  position: relative;
+}
+
+.graph-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+
+.graph-placeholder small {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+}
+
+.graph-legend {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--light-bg);
+  border-radius: 8px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #1e293b;
+}
+
+.start-color {
+  background: #fcd34d;
+}
+.final-color {
+  background: white;
+  border-width: 3px;
+}
+.start-final-color {
+  background: #10b981;
+}
+.legend-edge {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* بخش راهنما */
+.help-content pre {
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+
+.help-content ul {
+  margin: 16px 0;
+  padding-right: 20px;
+}
+
+.help-content li {
+  margin-bottom: 8px;
+  color: #475569;
+}
+
+/* واکنش‌گرایی */
+@media (max-width: 768px) {
+  .container {
+    border-radius: 0;
+  }
+
+  .tabs-header {
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    width: 100%;
+    text-align: right;
+  }
+
+  .field-row {
+    flex-direction: column;
+  }
+
+  .actions,
+  .graph-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .transition-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .transitions-header {
+    display: none;
+  }
+}
