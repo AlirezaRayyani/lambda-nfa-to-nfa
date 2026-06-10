@@ -554,9 +554,11 @@ function drawAutomatonGraph(nfaData, title = "") {
       borderWidth: isFinal ? 3 : 2,
       shape: "circle",
       font: { size: 16, face: "Vazirmatn" },
+      size: 40, // اندازه ثابت برای گره‌ها
     };
   });
 
+  // گروه‌بندی انتقال‌ها
   const edgeMap = {};
   delta.forEach((t) => {
     const key = `${t.from}-${t.to}`;
@@ -566,6 +568,7 @@ function drawAutomatonGraph(nfaData, title = "") {
         to: t.to,
         symbols: new Set(),
         isLambda: false,
+        isSelfLoop: t.from === t.to,
       };
     }
     edgeMap[key].symbols.add(t.symbol);
@@ -574,22 +577,31 @@ function drawAutomatonGraph(nfaData, title = "") {
     }
   });
 
-  const edges = Object.values(edgeMap).map((e) => {
-    const label = Array.from(e.symbols).join(", ");
-    // متغیر isSelfLoop را کلا حذف کنید چون با حالت dynamic نیازی به آن نیست
 
-    return {
+  const edges = [];
+  Object.values(edgeMap).forEach((e) => {
+    const label = Array.from(e.symbols).join(", ");
+    
+    edges.push({
       from: e.from,
       to: e.to,
       label: label,
       arrows: "to",
-      font: { size: 14, face: "Vazirmatn", align: "top" },
+      font: { 
+        size: 14, 
+        face: "Vazirmatn", 
+        align: "top",
+        color: e.isLambda ? "#EF4444" : "#3B82F6"
+      },
       color: e.isLambda
         ? { color: "#EF4444", highlight: "#DC2626" }
         : { color: "#3B82F6", highlight: "#1D4ED8" },
-      smooth: { type: "dynamic" }, // <--- رفع مشکل
-    };
+      smooth: {
+        type: "dynamic" // این ویژگی هم انتقالات عادی و هم حلقه‌ها را به شکل استاندارد رسم می‌کند
+      }
+    });
   });
+
 
   graphContainer.innerHTML = "";
 
@@ -601,30 +613,79 @@ function drawAutomatonGraph(nfaData, title = "") {
   const options = {
     physics: {
       enabled: true,
-      repulsion: { nodeDistance: 120 },
+      solver: "forceAtlas2Based",
+      forceAtlas2Based: {
+        gravitationalConstant: -50,
+        centralGravity: 0.01,
+        springLength: 100,
+        springConstant: 0.08,
+        damping: 0.4,
+        avoidOverlap: -1,
+      },
+      stabilization: {
+        enabled: true,
+        iterations: 1000,
+        updateInterval: 100,
+      },
     },
-    interaction: { dragNodes: true, dragView: true, zoomView: true },
+    interaction: {
+      dragNodes: true,
+      dragView: true,
+      zoomView: true,
+      hover: true,
+    },
+    edges: {
+      arrows: {
+        to: {
+          enabled: true,
+          scaleFactor: -0.5,
+        },
+      },
+      scaling: {
+        min: 1,
+        max: 5,
+        label: {
+          enabled: true,
+          min: 8,
+          max: 30,
+        },
+      },
+    },
+    layout: {
+      improvedLayout: true,
+      hierarchical: {
+        enabled: false,
+      },
+    },
   };
 
   network = new vis.Network(graphContainer, data, options);
+
+  // پس از رسم، موقعیت‌ها را تنظیم کنیم
+  network.on("stabilizationIterationsDone", function() {
+    network.setOptions({
+      physics: false // غیرفعال کردن فیزیک پس از تثبیت
+    });
+  });
 
   if (title) {
     const titleEl = document.createElement("div");
     titleEl.className = "graph-title";
     titleEl.textContent = title;
     titleEl.style.cssText = `
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            z-index: 1000;
-        `;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      z-index: 1000;
+    `;
     graphContainer.appendChild(titleEl);
   }
 }
+
 
 function clearGraph() {
   if (network) {
