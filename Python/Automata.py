@@ -7,9 +7,9 @@ class LambdaNFA:
         self.transitions = {}  # format: {'q0': {'a': ['q1', 'q2'], 'λ': ['q3']}}
     
     def get_inputs(self):
-        """Read NFA-λ specification from user"""
+        """Read λ-NFA specification from user"""
         print("\n" + "="*50)
-        print("NFA-λ Input")
+        print("λ-NFA Input")
         print("="*50)
         
         # Get states
@@ -46,7 +46,7 @@ class LambdaNFA:
                     break
                 print(f"Error: States {invalid} are not in the state set")
             else:
-                print("⚠️  Warning: No final state defined")
+                print("Warning: No final state defined")
                 self.final_states = []
                 break
         
@@ -70,7 +70,7 @@ class LambdaNFA:
             
             parts = trans_input.split()
             if len(parts) != 3:
-                print("⚠️  Incorrect format. Please try again")
+                print("Incorrect format. Please try again")
                 continue
             
             src, symbol, dst = parts
@@ -81,23 +81,23 @@ class LambdaNFA:
             
             # Validation
             if src not in self.states:
-                print(f"⚠️  Source state '{src}' is invalid")
+                print(f"Source state '{src}' is invalid")
                 continue
             
             if dst not in self.states:
-                print(f"⚠️  Destination state '{dst}' is invalid")
+                print(f"Destination state '{dst}' is invalid")
                 continue
             
             if symbol != 'λ' and symbol not in self.alphabet:
-                print(f"⚠️  Symbol '{symbol}' is not in the alphabet")
+                print(f"Symbol '{symbol}' is not in the alphabet")
                 continue
             
             # Add transition
             if dst not in self.transitions[src][symbol]:
                 self.transitions[src][symbol].append(dst)
-                print(f"✅ Transition added: {src} --{symbol}--> {dst}")
+                print(f"Transition added: {src} --{symbol}--> {dst}")
             else:
-                print(f"⚠️  This transition already exists")
+                print(f"This transition already exists")
     
     def lambda_closure(self, state_set):
         """Compute λ-closure for a set of states"""
@@ -123,7 +123,7 @@ class LambdaNFA:
         return closures
     
     def simulate(self, input_string):
-        """Simulate a string on the NFA-λ"""
+        """Simulate a string on the λ-NFA"""
         print(f"\n{'='*60}")
         print(f"Simulation for string: '{input_string}'")
         print('='*60)
@@ -150,7 +150,7 @@ class LambdaNFA:
                 current_states = closure_next
             else:
                 print(f"Step {i}: Reading '{symbol}'")
-                print(f"  ❌ No transition from {{ {', '.join(current_states)} }} on '{symbol}'")
+                print(f"No transition from {{ {', '.join(current_states)} }} on '{symbol}'")
                 current_states = []
                 break
         
@@ -158,7 +158,7 @@ class LambdaNFA:
         is_accepted = any(state in self.final_states for state in current_states)
         
         print(f"\n{'='*60}")
-        print(f"Result: {'✅ Accepted' if is_accepted else '❌ Rejected'}")
+        print(f"Result: {'Accepted' if is_accepted else 'Rejected'}")
         print(f"Final states: {{ {', '.join(current_states) if current_states else 'none'} }}")
         print(f"Accepting states: {{ {', '.join(self.final_states)} }}")
         print('='*60)
@@ -166,9 +166,9 @@ class LambdaNFA:
         return is_accepted
     
     def convert_to_nfa(self):
-        """Convert NFA-λ to λ-free NFA"""
+        """Convert λ-NFA to λ-free NFA"""
         print(f"\n{'='*60}")
-        print("Convert NFA-λ to NFA without λ")
+        print("Convert λ-NFA to NFA without λ")
         print('='*60)
         
         # Compute λ-closure of all states
@@ -208,13 +208,13 @@ class LambdaNFA:
                     nfa.transitions[state][symbol] = sorted(list(reachable))
         
         # Display results
-        print(f"\n📋 New NFA information:")
+        print(f"\nNew NFA information:")
         print(f"States: {{ {', '.join(nfa.states)} }}")
         print(f"Alphabet: {{ {', '.join(nfa.alphabet)} }}")
         print(f"Start state: {nfa.start_state}")
         print(f"Final states: {{ {', '.join(nfa.final_states)} }}")
         
-        print(f"\n📊 New transition function:")
+        print(f"\nNew transition function:")
         for state in nfa.states:
             for symbol in nfa.alphabet:
                 if nfa.transitions[state][symbol]:
@@ -224,13 +224,13 @@ class LambdaNFA:
         return nfa
     
     def display_info(self):
-        """Display NFA-λ information"""
+        """Display λ-NFA information"""
         print(f"\n{'='*60}")
         print("NFA-λ Information")
         print('='*60)
         print(f"States (Q): {{ {', '.join(self.states)} }}")
         print(f"Alphabet (Σ): {{ {', '.join(self.alphabet)} }}")
-        print(f"Start state (q₀): {self.start_state}")
+        print(f"Start state (q0): {self.start_state}")
         print(f"Final states (F): {{ {', '.join(self.final_states)} }}")
         
         print(f"\nTransition function (δ):")
@@ -260,8 +260,8 @@ def main():
         print("\n" + "="*60)
         print("Main Menu")
         print("="*60)
-        print("1. Define new NFA-λ")
-        print("2. Show NFA-λ information")
+        print("1. Define new λ-NFA")
+        print("2. Show λ-NFA information")
         print("3. Compute λ-closure of all states")
         print("4. Simulate a string")
         print("5. Convert to NFA without λ")
@@ -275,13 +275,13 @@ def main():
         
         elif choice == '2':
             if not nfa.states:
-                print("⚠️  Please define NFA-λ first (option 1)")
+                print("Please define λ-NFA first (option 1)")
             else:
                 nfa.display_info()
         
         elif choice == '3':
             if not nfa.states:
-                print("⚠️  Please define NFA-λ first (option 1)")
+                print("Please define λ-NFA first (option 1)")
             else:
                 print(f"\n{'='*60}")
                 print("λ-closure of all states")
@@ -292,17 +292,17 @@ def main():
         
         elif choice == '4':
             if not nfa.states:
-                print("⚠️  Please define NFA-λ first (option 1)")
+                print("Please define λ-NFA first (option 1)")
             else:
                 input_string = input("Enter input string: ").strip()
                 if input_string:
                     nfa.simulate(input_string)
                 else:
-                    print("⚠️  Empty string entered")
+                    print("Empty string entered")
         
         elif choice == '5':
             if not nfa.states:
-                print("⚠️  Please define NFA-λ first (option 1)")
+                print("Please define λ-NFA first (option 1)")
             else:
                 new_nfa = nfa.convert_to_nfa()
                 # Test simulation on new NFA
@@ -325,19 +325,19 @@ def main():
                                 current_states = list(next_states)
                                 print(f"Read '{symbol}' → {{ {', '.join(current_states)} }}")
                             else:
-                                print(f"Read '{symbol}' → ❌ No transition")
+                                print(f"Read '{symbol}' → No transition")
                                 current_states = []
                                 break
                         
                         is_accepted = any(state in new_nfa.final_states for state in current_states)
-                        print(f"\nResult: {'✅ Accepted' if is_accepted else '❌ Rejected'}")
+                        print(f"\nResult: {'Accepted' if is_accepted else 'Rejected'}")
         
         elif choice == '6':
             print("\nExiting...")
             break
         
         else:
-            print("⚠️  Invalid choice. Please enter a number 1-6")
+            print("Invalid choice. Please enter a number 1-6")
 
 
 if __name__ == "__main__":
